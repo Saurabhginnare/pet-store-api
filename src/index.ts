@@ -7,7 +7,7 @@ import rateLimit from 'express-rate-limit';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './utils/swagger';
 import petRoutes from './routes/pet/routes';
-import authRoutes from './auth/routes';
+import authRoutes from './routes/auth/routes';
 
 dotenv.config();
 const app = express();
