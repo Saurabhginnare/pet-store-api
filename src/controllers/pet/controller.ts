@@ -76,7 +76,6 @@ export const deletePet = async (req: AuthRequest, res: Response) => {
   }
 };
 
-
 export const updatePet = async (req: AuthRequest, res: Response) => {
   try {
     const petId = Number(req.params.id);
@@ -99,7 +98,6 @@ export const updatePet = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
 
 export const uploadImages = async (req: AuthRequest, res: Response) => {
   try {

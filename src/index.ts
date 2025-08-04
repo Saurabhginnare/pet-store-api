@@ -1,4 +1,3 @@
-// src/index.ts
 import express from 'express';
 import 'reflect-metadata';
 import cors from 'cors';
@@ -9,7 +8,6 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './utils/swagger';
 import petRoutes from './routes/pet/routes';
 import authRoutes from './auth/routes';
-// import { errorHandler } from './middlewares/error.middleware';
 
 dotenv.config();
 const app = express();
@@ -36,10 +34,9 @@ app.use('/api/auth', authRoutes);
 // Swagger Docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Global error handler
-// app.use(errorHandler);
-
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
+
+export default app;

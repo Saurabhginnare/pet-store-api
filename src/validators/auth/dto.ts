@@ -4,10 +4,9 @@ export enum UserRole {
   USER = 'USER',
   ADMIN = 'ADMIN'
 }
-
 export class RegisterDTO {
   @IsEmail()
-  email: string = ''; // Default value ensures it's never undefined
+  email: string = '';
 
   @MinLength(6)
   password: string = '';
@@ -15,7 +14,6 @@ export class RegisterDTO {
   @IsEnum(UserRole, { message: 'Role must be USER or ADMIN' })
   role: UserRole = UserRole.USER as const;
 }
-
 export class LoginDTO {
   @IsEmail()
   email: string = '';

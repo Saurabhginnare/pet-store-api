@@ -20,7 +20,6 @@ export class PetDto {
   breed: string = '';
 }
 
-
 export const validatePet = async (req: Request, res: Response, next: NextFunction) => {
   const dto = plainToInstance(PetDto, req.body);
   const errors = await validate(dto);

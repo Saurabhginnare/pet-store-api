@@ -108,9 +108,6 @@ router.get('/:id', getPet);
  *         description: Pet not found
  */
 router.delete('/:id', authenticateToken, authorizeRole('ADMIN'), deletePet);
-
-
-
 /**
  * @swagger
  * /pets/{id}:
