@@ -21,7 +21,7 @@ A RESTful API for managing pets, built with **Node.js**, **TypeScript**, **Expre
 
 ### 1. Clone the repo
 step-1
-git clone https://github.com/your-username/pet-store-api.git
+git clone https://github.com/saurabhginnare/pet-store-api.git
 
 step-2
 cd pet-store-api
