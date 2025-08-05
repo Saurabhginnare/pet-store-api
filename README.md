@@ -14,12 +14,12 @@ A RESTful API for managing pets, built with **Node.js**, **TypeScript**, **Expre
 - 🗃️ **MySQL** with `Prisma ORM`
 - 📦 **Clean layered architecture**
 
-
 ---
 
 ## 🛠️ Installation
 
 ### 1. Clone the repo
+
 step-1
 git clone https://github.com/saurabhginnare/pet-store-api.git
 
@@ -42,4 +42,14 @@ npx prisma migrate dev --name init
 npx prisma generate
 
 step-6
+npm run dev
+
+runing redis
+
+docker run -d -p 6379:6379 --name redis redis
+
+docker start redis
+
+docker exec -it redis redis-cli ping
+
 npm run dev

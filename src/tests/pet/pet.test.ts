@@ -2,32 +2,88 @@ import request from 'supertest';
 import app from '../../index';
 import prisma from '../../utils/prisma';
 
-describe('GET /api/pets/:id', () => {
-  let petId: number;
+let token: string;
+let petId: string;
 
-  beforeAll(async () => {
-    const pet = await prisma.pet.create({
-      data: {
-        name: 'Tiger',
-        type: 'Cat',
+beforeAll(async () => {
+  await prisma.user.deleteMany();
+  await prisma.pet.deleteMany();
+
+  // Register a new user
+  await request(app).post('/api/auth/register').send({
+    email: 'testpet@example.com',
+    password: 'Test@1234',
+    role: 'ADMIN'
+  });
+
+  // Login to get token
+  const loginRes = await request(app).post('/api/auth/login').send({
+    email: 'testpet@example.com',
+    password: 'Test@1234'
+  });
+
+  token = loginRes.body.token;
+});
+
+afterAll(async () => {
+  await prisma.$disconnect();
+});
+
+describe('Pet Routes', () => {
+  it('should create a new pet', async () => {
+    const res = await request(app)
+      .post('/api/pets')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'Buddy',
+        type: 'Dog',
+        age: 2,
+        breed: 'Beagle'
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty('name', 'Buddy');
+    petId = res.body.id;
+  });
+
+  it('should fetch a specific pet', async () => {
+    const res = await request(app)
+      .get(`/api/pets/${petId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('name', 'Buddy');
+  });
+
+  it('should update a pet', async () => {
+    const res = await request(app)
+      .put(`/api/pets/${petId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'Bruno',
+        type: 'Dog',
         age: 3,
-        breed: 'Siamese'
-      }
-    });
-    petId = pet.id;
+        breed: 'Pug'
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('name', 'Bruno');
   });
 
-  it('should fetch pet by id', async () => {
-    const res = await request(app).get(`/api/pets/${petId}`);
-    console.log('API response:', res.body);
-    expect(res.statusCode).toBe(200);
-    expect(res.body?.data?.name).toBe('Tiger');
+  it('should delete a pet', async () => {
+    const res = await request(app)
+      .delete(`/api/pets/${petId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('message', 'Pet deleted successfully');
   });
 
-  afterAll(async () => {
-    await prisma.image.deleteMany({ where: { petId } });
-    await prisma.pet.delete({ where: { id: petId } });
+  it('should return 404 for deleted pet', async () => {
+    const res = await request(app)
+      .get(`/api/pets/${petId}`)
+      .set('Authorization', `Bearer ${token}`);
 
-    await prisma.$disconnect();
+    expect(res.status).toBe(404);
   });
 });
